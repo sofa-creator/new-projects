@@ -1,0 +1,506 @@
+<title>Korean Mining Desk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F5F3EE; --panel:#FFFFFF; --panel-2:#EEEBE3; --line:#DDD8CC;
+  --ink:#1B1D23; --ink-2:#5B5E68; --ink-3:#8A8D96;
+  --accent:#C7285F; --accent-soft:#FBE3EB; --accent-ink:#8E1A44;
+  --link:#2E63C9; --link-soft:#E3ECFB;
+  --feel:#B4720B; --feel-soft:#FBEED3;
+  --ok:#2E8B57; --ok-soft:#DFF2E6;
+  --warn:#B23B3B;
+  --shadow:0 1px 2px rgba(20,22,30,.06), 0 6px 20px rgba(20,22,30,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#14161C; --panel:#1C1F27; --panel-2:#23272F; --line:#2F333D;
+    --ink:#ECE9E1; --ink-2:#B3B0A8; --ink-3:#7E8089;
+    --accent:#F0568A; --accent-soft:#3A1E2A; --accent-ink:#FFB3CB;
+    --link:#7FB3FF; --link-soft:#1E2A40;
+    --feel:#F0B54A; --feel-soft:#3A2E17;
+    --ok:#6FCF97; --ok-soft:#1D3327;
+    --warn:#FF7B7B;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#14161C; --panel:#1C1F27; --panel-2:#23272F; --line:#2F333D;
+  --ink:#ECE9E1; --ink-2:#B3B0A8; --ink-3:#7E8089;
+  --accent:#F0568A; --accent-soft:#3A1E2A; --accent-ink:#FFB3CB;
+  --link:#7FB3FF; --link-soft:#1E2A40;
+  --feel:#F0B54A; --feel-soft:#3A2E17;
+  --ok:#6FCF97; --ok-soft:#1D3327;
+  --warn:#FF7B7B;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans KR",-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:15px; line-height:1.5; margin:0; padding-inline:16px; padding-block:0 48px;
+}
+.wrap{max-width:1180px; margin:0 auto}
+h1,h2,h3{font-family:"Gowun Batang","Apple SD Gothic Neo","Nanum Myeongjo",Georgia,serif; text-wrap:balance; margin:0; line-height:1.2}
+a{color:var(--link)}
+button{font:inherit; cursor:pointer}
+input,textarea,select{font:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px 10px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,.word:focus-visible{outline:2px solid var(--link); outline-offset:1px}
+textarea{width:100%; min-height:150px; resize:vertical; font-family:"IBM Plex Sans KR",sans-serif; line-height:1.5}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums}
+
+/* header */
+.mast{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px 24px; padding:28px 0 16px; border-bottom:1px solid var(--line)}
+.mast h1{font-size:2rem; font-weight:700}
+.mast h1 .ko{color:var(--accent); font-weight:400; margin-left:.35em}
+.mast p{margin:.25em 0 0; color:var(--ink-2); max-width:56ch}
+.tonight{display:flex; gap:18px; align-items:baseline; flex-wrap:wrap}
+.stat{display:flex; flex-direction:column; align-items:flex-start}
+.stat b{font-size:1.6rem; font-weight:600; line-height:1; font-variant-numeric:tabular-nums}
+.stat span{font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); margin-top:4px}
+.phase{display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--ink-2)}
+.phase select{padding:5px 8px; border-radius:6px}
+
+/* grid */
+.desk{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:20px; margin-top:20px; align-items:start}
+@media (max-width:880px){.desk{grid-template-columns:1fr}}
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow)}
+.panel > header{display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:14px 16px 10px; border-bottom:1px solid var(--line)}
+.panel > header h2{font-size:1.15rem}
+.panel > header .sub{font-size:.8rem; color:var(--ink-3)}
+.panel .body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:12px}
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.row > input[type=text]{flex:1 1 200px; min-width:0}
+.hint{font-size:.8rem; color:var(--ink-3); margin:0}
+.hint a{color:var(--link)}
+
+/* buttons */
+.btn{border:1px solid var(--line); background:var(--panel-2); color:var(--ink); border-radius:8px; padding:7px 12px; font-size:.9rem; font-weight:500; display:inline-flex; align-items:center; gap:6px}
+.btn:hover{border-color:var(--ink-3)}
+.btn:disabled{opacity:.5; cursor:default}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.small{padding:4px 9px; font-size:.8rem; border-radius:6px}
+.btn.ghost{background:transparent}
+
+/* transcript lines */
+.lines{display:flex; flex-direction:column; max-height:62vh; overflow:auto; border:1px solid var(--line); border-radius:8px; background:var(--panel)}
+.lines:empty{display:none}
+.line{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:10px; align-items:start; padding:7px 10px; border-bottom:1px solid var(--line)}
+.line:last-child{border-bottom:0}
+.line.mined{background:var(--accent-soft)}
+.line .t{font-size:.78rem; padding:2px 6px; border-radius:5px; background:var(--link-soft); color:var(--link); text-decoration:none; white-space:nowrap; margin-top:2px}
+.line .t.none{background:var(--panel-2); color:var(--ink-3)}
+.line .txt{font-size:1.05rem; line-height:1.55; word-break:keep-all; overflow-wrap:anywhere}
+.word{cursor:pointer; border-radius:4px; padding:0 1px}
+.word:hover{background:var(--link-soft); color:var(--link)}
+.line .mine{opacity:.65}
+.line:hover .mine, .line .mine:focus-visible{opacity:1}
+.example-tag{font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); padding:8px 10px; border-bottom:1px solid var(--line); background:var(--panel-2)}
+
+/* pile */
+.pile{display:flex; flex-direction:column; gap:10px}
+.item{border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; background:var(--panel)}
+.item.pending{border-style:dashed}
+.item.exported{opacity:.75}
+.item .top{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:.75rem; color:var(--ink-3)}
+.item .top .x{margin-left:auto; border:0; background:transparent; color:var(--ink-3); font-size:1rem; line-height:1; padding:2px 6px; border-radius:6px}
+.item .top .x:hover{color:var(--warn); background:var(--panel-2)}
+.chip{display:inline-block; font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; padding:2px 7px; border-radius:999px; background:var(--panel-2); color:var(--ink-2); font-weight:600}
+.chip.word{background:var(--link-soft); color:var(--link)}
+.chip.pending{background:var(--panel-2); color:var(--ink-3)}
+.chip.card{background:var(--ok-soft); color:var(--ok)}
+.item .src{font-size:1rem; color:var(--ink-2)}
+.item .hangul{font-family:"Gowun Batang","Apple SD Gothic Neo",serif; font-size:1.35rem; line-height:1.4; word-break:keep-all}
+.item .meaning{font-size:.98rem}
+.kv{display:grid; grid-template-columns:auto minmax(0,1fr); gap:4px 12px; font-size:.9rem}
+.kv .k{font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-3); padding-top:3px; white-space:nowrap}
+.words{display:flex; flex-wrap:wrap; gap:6px}
+.words span{font-size:.85rem; padding:2px 8px; border-radius:6px; background:var(--panel-2)}
+.words span b{font-weight:600; margin-right:4px}
+.feel{border-left:3px solid var(--feel); background:var(--feel-soft); padding:6px 10px; border-radius:0 8px 8px 0; font-size:.9rem}
+.feel b{color:var(--feel)}
+.feel a{font-size:.8rem; margin-left:6px}
+.cardrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.cardrow label{display:flex; gap:6px; align-items:center; font-size:.85rem; color:var(--ink-2)}
+.cardrow input[type=text]{flex:1 1 220px; min-width:0; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.82rem; padding:5px 8px}
+.err{color:var(--warn); font-size:.85rem}
+.status{font-size:.85rem; color:var(--ink-2); min-height:1.2em}
+.toolbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); background:var(--panel-2); border-radius:0}
+.toolbar .spacer{flex:1}
+.empty{padding:22px 12px; text-align:center; color:var(--ink-3); font-size:.9rem; border:1px dashed var(--line); border-radius:10px}
+.toast{position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:999px; font-size:.85rem; box-shadow:var(--shadow); opacity:0; transition:opacity .2s; pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+details.fmt{font-size:.82rem; color:var(--ink-2)}
+details.fmt summary{cursor:pointer; color:var(--ink-3)}
+details.fmt pre{background:var(--panel-2); padding:8px 10px; border-radius:8px; overflow-x:auto; font-size:.78rem; margin:6px 0 0}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Mining Desk<span class="ko">채굴</span></h1>
+      <p>Watch the live on YouTube, paste the transcript here, take the lines you half-caught. Each one comes back as Hangul, meaning, the hard bit, a feel-layer flag when there is one, and a card if it earns one.</p>
+    </div>
+    <div class="tonight">
+      <div class="stat"><b id="statToday">0</b><span>mined today</span></div>
+      <div class="stat"><b id="statCards">0</b><span>cards waiting</span></div>
+      <div class="stat"><b id="statTotal">0</b><span>all time</span></div>
+      <div class="phase"><label for="phase">Phase</label>
+        <select id="phase">
+          <option value="0">0 · Hangul</option>
+          <option value="1">1 · Survival</option>
+          <option value="2">2 · Getting around it</option>
+          <option value="3">3 · Saying what you mean</option>
+          <option value="4">4 · Proof</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="desk">
+    <!-- SOURCE -->
+    <section class="panel" aria-labelledby="srcH">
+      <header><h2 id="srcH">Source</h2><span class="sub" id="srcSub">nothing loaded</span></header>
+      <div class="body">
+        <div class="row">
+          <input type="text" id="url" placeholder="YouTube link (live, vlog, interview)" autocomplete="off" spellcheck="false">
+          <a id="openYt" class="btn small" href="#" target="_blank" rel="noopener" hidden>Open on YouTube ↗</a>
+        </div>
+        <div class="row">
+          <input type="text" id="label" placeholder="Label, e.g. 지수 live 24 Sep" autocomplete="off">
+          <select id="recent" title="Saved sources"><option value="">Saved sources…</option></select>
+        </div>
+        <textarea id="transcript" placeholder="Paste the transcript. On YouTube: … more → Show transcript → select all → copy. Timestamps are kept and become links to that second." spellcheck="false"></textarea>
+        <details class="fmt"><summary>What it understands</summary>
+          <pre>0:12
+오늘 진짜 피곤하잖아
+0:15
+근데 왔어요
+
+[00:12] 오늘 진짜 피곤하잖아
+0:12 오늘 진짜 피곤하잖아
+lines with no timestamp at all</pre>
+        </details>
+        <div class="row">
+          <button class="btn primary" id="load">Load lines</button>
+          <button class="btn" id="saveSrc">Save source</button>
+          <button class="btn ghost" id="clearSrc">Clear</button>
+          <span class="status" id="srcStatus"></span>
+        </div>
+        <input type="text" id="filter" placeholder="Find a word in the transcript" autocomplete="off">
+        <p class="hint">Click <b>+</b> to mine a whole line. Click a single word to mine just that word. Timestamps open YouTube at that second.</p>
+        <div class="lines" id="lines"></div>
+      </div>
+    </section>
+
+    <!-- PILE -->
+    <section class="panel" aria-labelledby="pileH">
+      <header><h2 id="pileH">Mined</h2><span class="sub" id="storeSub">…</span></header>
+      <div class="toolbar">
+        <button class="btn primary" id="decode" disabled>Decode</button>
+        <button class="btn ghost small" id="stop" hidden>Stop</button>
+        <span class="spacer"></span>
+        <button class="btn" id="exportBtn" disabled>Export cards</button>
+        <button class="btn" id="copyBtn" disabled>Copy</button>
+        <label style="font-size:.8rem;color:var(--ink-2);display:flex;gap:6px;align-items:center"><input type="checkbox" id="showExported"> show exported</label>
+      </div>
+      <div class="body">
+        <div class="row">
+          <input type="text" id="quick" placeholder="A line you half-caught, or one word (Hangul or how it sounded)" autocomplete="off">
+          <select id="quickKind"><option value="line">line</option><option value="word">word</option></select>
+          <button class="btn" id="quickAdd">Add</button>
+        </div>
+        <div class="status" id="pileStatus"></div>
+        <div class="pile" id="pile"></div>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const ROADMAP = "https://claude.ai/artifact/KEJHTw13Xv8tDRk2TLMjDe";
+const FEEL_ENDINGS = "-잖아(요), -거든(요), -네(요), -구나 / -군요, -더라(고요), -지(요) / -죄, -는데(요), -(으)ㄹ걸(요), -나 봐 / -(으)ㄴ가 봐, -(으)ㄹ게(요), or a 반말↔존댓말 switch".replace("죄","죠");
+
+// ---------- helpers ----------
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
+const newId = () => "m_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const fmtT = (s) => { if (s == null) return ""; s = Math.floor(s); const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), x = s%60; return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(x).padStart(2,"0"); };
+const ls = { get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+let toastT; const toast = (m) => { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1800); };
+
+function videoId(url) {
+  try {
+    const u = new URL(url.trim());
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1).split("/")[0] || null;
+    if (u.hostname.includes("youtube.com")) {
+      if (u.searchParams.get("v")) return u.searchParams.get("v");
+      const m = u.pathname.match(/\/(live|shorts|embed)\/([\w-]{6,})/); if (m) return m[2];
+    }
+  } catch {}
+  return null;
+}
+const ytAt = (id, t) => id ? ("https://www.youtube.com/watch?v=" + encodeURIComponent(id) + (t != null ? "&t=" + Math.floor(t) + "s" : "")) : null;
+
+function parseTs(s) {
+  const m = s.match(/^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})$/); if (!m) return null;
+  return (m[1] ? +m[1]*3600 : 0) + (+m[2])*60 + (+m[3]);
+}
+function parseTranscript(text) {
+  const out = []; let pendingT = null;
+  for (let raw of text.split(/\r?\n/)) {
+    let line = raw.trim(); if (!line) continue;
+    const bare = line.replace(/^\[|\]$/g, "");
+    const alone = parseTs(bare); if (alone != null) { pendingT = alone; continue; }
+    const lead = line.match(/^\[?((?:\d{1,2}:)?\d{1,2}:\d{2})\]?\s+(.+)$/);
+    if (lead) { out.push({ t: parseTs(lead[1]), text: lead[2].trim() }); pendingT = null; continue; }
+    out.push({ t: pendingT, text: line }); pendingT = null;
+  }
+  return out;
+}
+
+// ---------- store (db with local fallback) ----------
+const store = {
+  mode: "local", items: new Map(), sources: new Map(), db: null, onChange: () => {},
+  async init() {
+    let db = null;
+    try { db = await window.claude?.use?.("db"); } catch { db = null; }
+    if (db) {
+      this.db = db; this.mode = "db";
+      try {
+        db.collection("mined").orderBy("createdAt", "desc").limit(600).onSnapshot((snap) => {
+          this.items = new Map(snap.docs.map((d) => [d.id, { id: d.id, ...d.data() }])); this.onChange();
+        }, () => { this.fallbackLocal(); });
+        db.collection("sources").orderBy("savedAt", "desc").limit(40).onSnapshot((snap) => {
+          this.sources = new Map(snap.docs.map((d) => [d.id, { id: d.id, ...d.data() }])); this.onChange();
+        }, () => {});
+        return;
+      } catch {}
+    }
+    this.fallbackLocal();
+  },
+  fallbackLocal() {
+    this.mode = "local"; this.db = null;
+    const s = ls.get("mining-desk-v1") || { items: [], sources: [] };
+    this.items = new Map(s.items.map((i) => [i.id, i])); this.sources = new Map(s.sources.map((i) => [i.id, i])); this.onChange();
+  },
+  persistLocal() { ls.set("mining-desk-v1", { items: [...this.items.values()], sources: [...this.sources.values()] }); },
+  async put(item) {
+    this.items.set(item.id, item); this.onChange();
+    if (this.db) { try { await this.db.collection("mined").doc(item.id).set(stripId(item)); } catch (e) { pileStatus("Could not save (" + (e.code || "error") + "). Kept on this page only."); } }
+    else this.persistLocal();
+  },
+  async del(id) {
+    this.items.delete(id); this.onChange();
+    if (this.db) { try { await this.db.collection("mined").doc(id).delete(); } catch {} } else this.persistLocal();
+  },
+  async putSource(src) {
+    this.sources.set(src.id, src); this.onChange();
+    if (this.db) { try { await this.db.collection("sources").doc(src.id).set(stripId(src)); } catch (e) { srcStatus("Could not save source (" + (e.code || "error") + ")."); return false; } }
+    else this.persistLocal();
+    return true;
+  },
+};
+const stripId = (o) => { const c = { ...o }; delete c.id; return c; };
+const srcStatus = (m) => { $("srcStatus").textContent = m; };
+const pileStatus = (m, isErr) => { const el = $("pileStatus"); el.textContent = m; el.className = "status" + (isErr ? " err" : ""); };
+
+// ---------- source pane ----------
+let lines = []; let cur = { id: null, url: "", label: "" }; let usingExample = false;
+const EXAMPLE = [{ t: 12, text: "아 진짜 오늘 너무 피곤하잖아" }, { t: 15, text: "근데 여러분 보고 싶어서 왔어요" }, { t: 21, text: "이거 먹어 봤어? 맛있더라고" }];
+
+function minedTexts() { const s = new Set(); for (const i of store.items.values()) s.add(i.text); return s; }
+function renderLines() {
+  const box = $("lines"); const q = $("filter").value.trim(); const mined = minedTexts();
+  const vid = cur.id && !cur.id.startsWith("paste-") ? cur.id : null;
+  let html = usingExample ? '<div class="example-tag">Example lines, so you can see how it works. Load your own transcript to replace them.</div>' : "";
+  lines.forEach((ln, i) => {
+    if (q && !ln.text.includes(q)) return;
+    const href = ytAt(vid, ln.t);
+    const t = href ? `<a class="t mono" href="${href}" target="_blank" rel="noopener" title="Open YouTube at ${fmtT(ln.t)}">${fmtT(ln.t)}</a>` : `<span class="t none mono">${ln.t != null ? fmtT(ln.t) : "·"}</span>`;
+    const words = ln.text.split(/(\s+)/).map((w) => /^\s+$/.test(w) ? w : `<span class="word" tabindex="0" role="button" data-w="${esc(w)}">${esc(w)}</span>`).join("");
+    html += `<div class="line${mined.has(ln.text) ? " mined" : ""}" data-i="${i}">${t}<div class="txt">${words}</div><button class="btn small mine" title="Mine this line" data-i="${i}">+</button></div>`;
+  });
+  box.innerHTML = html;
+  $("srcSub").textContent = lines.length ? `${lines.length} lines${cur.label ? " · " + cur.label : ""}` : "nothing loaded";
+}
+function loadFromInputs(silent) {
+  const url = $("url").value.trim(); const id = videoId(url);
+  cur = { id: id || (cur.id && cur.id.startsWith("paste-") ? cur.id : "paste-" + Date.now().toString(36)), url, label: $("label").value.trim() };
+  const parsed = parseTranscript($("transcript").value);
+  if (!parsed.length) { if (!silent) srcStatus("Nothing to load. Paste a transcript first."); return false; }
+  lines = parsed; usingExample = false; renderLines(); srcStatus(`${lines.length} lines loaded.`);
+  const a = $("openYt"); if (id) { a.href = ytAt(id); a.hidden = false; } else a.hidden = true;
+  return true;
+}
+$("load").onclick = () => loadFromInputs(false);
+$("url").addEventListener("input", () => { const id = videoId($("url").value); const a = $("openYt"); if (id) { a.href = ytAt(id); a.hidden = false; } else a.hidden = true; });
+$("saveSrc").onclick = async () => {
+  if (!loadFromInputs(false)) return;
+  const src = { id: cur.id, url: cur.url, label: cur.label || (cur.id.startsWith("paste-") ? "pasted " + today() : cur.id), transcript: $("transcript").value, savedAt: new Date().toISOString() };
+  if (await store.putSource(src)) srcStatus("Saved. It's in “Saved sources”.");
+};
+$("clearSrc").onclick = () => { $("url").value = ""; $("label").value = ""; $("transcript").value = ""; lines = []; cur = { id: null, url: "", label: "" }; usingExample = false; renderLines(); $("openYt").hidden = true; srcStatus(""); };
+$("filter").addEventListener("input", renderLines);
+$("recent").addEventListener("change", () => {
+  const s = store.sources.get($("recent").value); if (!s) return;
+  $("url").value = s.url || ""; $("label").value = s.label || ""; $("transcript").value = s.transcript || ""; loadFromInputs(true);
+});
+$("lines").addEventListener("click", (e) => {
+  const b = e.target.closest("button.mine"); if (b) { mineLine(+b.dataset.i); return; }
+  const w = e.target.closest(".word"); if (w) { mineWord(w.dataset.w, +w.closest(".line").dataset.i); }
+});
+$("lines").addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("word")) { e.preventDefault(); mineWord(e.target.dataset.w, +e.target.closest(".line").dataset.i); } });
+
+function ctxFor(i) { const a = lines[i-1]?.text, b = lines[i+1]?.text; return [a, b].filter(Boolean).join(" / "); }
+function baseItem(text, kind, i) {
+  const ln = i != null ? lines[i] : null; const vid = cur.id && !cur.id.startsWith("paste-") ? cur.id : null;
+  return { id: newId(), text, kind, videoId: vid, url: ln && vid ? ytAt(vid, ln.t) : (cur.url || null), t: ln ? ln.t : null, label: cur.label || null, ctx: i != null ? ctxFor(i) : "", createdAt: new Date().toISOString(), day: today(), decoded: null, card: false, cardLine: "", exportedAt: null };
+}
+function mineLine(i) { const ln = lines[i]; if (!ln) return; if (minedTexts().has(ln.text)) { toast("Already in the pile"); return; } store.put(baseItem(ln.text, "line", i)); toast("Mined · " + ln.text.slice(0, 18)); renderLines(); }
+function mineWord(w, i) { w = w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, ""); if (!w) return; store.put(baseItem(w, "word", i)); toast("Word · " + w); }
+$("quickAdd").onclick = () => { const v = $("quick").value.trim(); if (!v) return; store.put(baseItem(v, $("quickKind").value, null)); $("quick").value = ""; toast("Added"); };
+$("quick").addEventListener("keydown", (e) => { if (e.key === "Enter") $("quickAdd").onclick(); });
+
+// ---------- pile ----------
+function sorted() { return [...store.items.values()].sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || "")); }
+function renderPile() {
+  const showExp = $("showExported").checked; const box = $("pile"); const all = sorted();
+  const list = all.filter((i) => showExp || !i.exportedAt);
+  const pending = all.filter((i) => !i.decoded).length;
+  const cardsWaiting = all.filter((i) => i.card && !i.exportedAt).length;
+  $("statToday").textContent = all.filter((i) => i.day === today()).length;
+  $("statCards").textContent = cardsWaiting; $("statTotal").textContent = all.length;
+  $("decode").textContent = pending ? `Decode ${pending}` : "Decode"; $("decode").disabled = !pending || !sampleFn || busy;
+  $("exportBtn").textContent = cardsWaiting ? `Export ${cardsWaiting} card${cardsWaiting === 1 ? "" : "s"}` : "Export cards";
+  $("exportBtn").disabled = !cardsWaiting || !downloadsNs; $("copyBtn").disabled = !cardsWaiting;
+  if (!list.length) { box.innerHTML = `<div class="empty">${all.length ? "Everything here has been exported. Tick “show exported” to see it." : "Nothing mined yet. Load a transcript and press + on a line, or type one above."}</div>`; return; }
+  box.innerHTML = list.map(renderItem).join("");
+}
+function renderItem(i) {
+  const d = i.decoded; const when = i.t != null && i.url ? `<a class="mono" href="${esc(i.url)}" target="_blank" rel="noopener">${fmtT(i.t)}</a>` : "";
+  let body = `<div class="src">${esc(i.text)}</div>`;
+  if (d) {
+    body = `<div class="hangul">${esc(d.hangul || i.text)}</div><div class="meaning">${esc(d.meaning || "")}</div>`;
+    const kv = [];
+    if (d.hard) kv.push(`<span class="k">hard bit</span><span>${esc(d.hard)}</span>`);
+    if (d.example) kv.push(`<span class="k">example</span><span>${esc(d.example)}</span>`);
+    if (kv.length) body += `<div class="kv">${kv.join("")}</div>`;
+    if (Array.isArray(d.words) && d.words.length) body += `<div class="words">${d.words.map((w) => `<span><b>${esc(w.word)}</b>${esc(w.meaning)}</span>`).join("")}</div>`;
+    if (d.feel && d.feel.ending) body += `<div class="feel"><b>${esc(d.feel.ending)}</b> ${esc(d.feel.note || "")}<a href="${ROADMAP}" target="_blank" rel="noopener">log the situation on the roadmap ↗</a></div>`;
+    body += `<div class="cardrow"><label><input type="checkbox" data-act="card" data-id="${i.id}" ${i.card ? "checked" : ""}> card</label><input type="text" data-act="cardline" data-id="${i.id}" value="${esc(i.cardLine || "")}" placeholder="front;back;note" ${i.card ? "" : "disabled"}></div>`;
+  }
+  const chips = `<span class="chip ${i.kind === "word" ? "word" : ""}">${i.kind}</span>${d ? "" : '<span class="chip pending">pending</span>'}${i.card ? '<span class="chip card">card</span>' : ""}${i.exportedAt ? '<span class="chip">exported</span>' : ""}`;
+  return `<article class="item ${d ? "" : "pending"} ${i.exportedAt ? "exported" : ""}" data-id="${i.id}"><div class="top">${chips}${when}${i.label ? `<span>${esc(i.label)}</span>` : ""}<button class="x" data-act="del" data-id="${i.id}" title="Remove">×</button></div>${body}</article>`;
+}
+$("pile").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-act]"); if (!b) return; const it = store.items.get(b.dataset.id); if (!it) return;
+  if (b.dataset.act === "del") { store.del(it.id); renderLines(); }
+});
+$("pile").addEventListener("change", (e) => {
+  const el = e.target.closest("[data-act]"); if (!el) return; const it = store.items.get(el.dataset.id); if (!it) return;
+  if (el.dataset.act === "card") { store.put({ ...it, card: el.checked, exportedAt: null }); }
+  if (el.dataset.act === "cardline") { store.put({ ...it, cardLine: el.value.trim() }); }
+});
+$("showExported").addEventListener("change", renderPile);
+
+// ---------- decode (sample) ----------
+let sampleFn = null, downloadsNs = null, busy = false, ctl = null;
+function prompt(items) {
+  const phase = $("phase").value;
+  const payload = items.map((i) => ({ id: i.id, kind: i.kind, text: i.text, context: i.ctx || "", source: i.label || "" }));
+  return `You are the mining decoder for Sofia's Korean project. She is a beginner at Phase ${phase} (0 = Hangul week, 1 = A1 survival, 2 = A2, 3 = B1 grammar, 4 = B1 proof). She learns by producing, mines lines from K-pop lives, vlogs and interviews, and keeps Anki cards. Her native languages are English, Russian and Latvian; she has C1 Spanish.
+
+RULES
+- Hangul only. Never romanise anything, not even in notes.
+- English scaffolding around the Korean. Short. No praise, no softening, no "great catch".
+- She may have typed the line as it sounded, with mistakes. Reconstruct what was most likely actually said (keep 반말, slang, contractions as spoken; fix spelling and spacing).
+- One parallel at most, only when it truly helps: particles and cases → Russian; feel, mood and register → Spanish. Never a tour of languages.
+- If a line contains one of these feel-layer endings, flag it: ${FEEL_ENDINGS}. The note says in one line what the ending is doing in this exact situation, with the parallel (e.g. "you can see it's raining, so why ask — же").
+- A card is earned only by a reusable pattern or a high-frequency chunk near her level. Proper nouns, one-off slang, or grammar far above her phase get card:false (still decode them).
+- cardLine format is exactly "front;back;note" with no other semicolons. front = the Hangul line (or the word for a word item), back = natural English, note = the grammar or feel point in a few words.
+
+For kind "line" return: id, hangul, meaning (one natural English line), hard (the ONE mechanism that made it hard to catch: name it, e.g. 연음, 비음화, a contraction like 뭐야→모야, speed, an ending), words (1–3 objects {word: dictionary form, meaning} worth knowing from this line), feel (null or {ending, note}), card (boolean), cardLine.
+For kind "word" return: id, hangul (dictionary form), meaning, hard (how it appears conjugated or contracted in speech, if relevant, else ""), example (one sentence at her phase using it), words ([]), feel (null unless the word IS a feel ending), card, cardLine.
+
+Reply with ONLY a JSON array, one object per input item, same ids, no other text.
+
+ITEMS:
+${JSON.stringify(payload)}`;
+}
+async function decodePending() {
+  if (!sampleFn || busy) return;
+  const pending = sorted().filter((i) => !i.decoded).slice(0, 20); if (!pending.length) return;
+  busy = true; ctl = new AbortController(); $("stop").hidden = false; $("decode").disabled = true;
+  pileStatus(`Thinking… decoding ${pending.length} ${pending.length === 1 ? "item" : "items"}. Usually 10–40 seconds.`);
+  try {
+    const arr = await sampleFn.json(prompt(pending), { signal: ctl.signal });
+    if (!Array.isArray(arr)) throw { code: "invalid_json", message: "not an array" };
+    let n = 0;
+    for (const r of arr) {
+      const it = store.items.get(String(r?.id)); if (!it) continue;
+      const decoded = { hangul: String(r.hangul || it.text), meaning: String(r.meaning || ""), hard: String(r.hard || ""), example: r.example ? String(r.example) : "", words: Array.isArray(r.words) ? r.words.filter((w) => w && w.word).map((w) => ({ word: String(w.word), meaning: String(w.meaning || "") })) : [], feel: r.feel && r.feel.ending ? { ending: String(r.feel.ending), note: String(r.feel.note || "") } : null };
+      await store.put({ ...it, decoded, card: !!r.card, cardLine: String(r.cardLine || "").trim() || (decoded.hangul + ";" + decoded.meaning + ";") });
+      n++;
+    }
+    const feels = arr.filter((r) => r?.feel?.ending).length;
+    pileStatus(`Decoded ${n}.${feels ? ` ${feels} feel-layer ${feels === 1 ? "ending" : "endings"} flagged — log the situations on the roadmap.` : ""}${pending.length === 20 ? " More pending: press Decode again." : ""}`);
+  } catch (e) {
+    const code = e?.code || "upstream_error";
+    if (code === "cancelled") pileStatus("Stopped.");
+    else if (code === "not_granted" || code === "sampling_disabled" || code === "not_declared" || code === "capability_disabled") { sampleFn = null; pileStatus("Decoding isn't available in this view. The pile still saves; decode from a chat instead.", true); }
+    else if (code === "rate_limited") pileStatus("Claude is rate-limited right now. Try again in a minute.", true);
+    else if (code === "invalid_json") pileStatus("The answer didn't parse. Press Decode again; if it keeps failing, decode fewer at once.", true);
+    else if (code === "prompt_too_large") pileStatus("Too much at once. Remove a few items or shorten the transcript context.", true);
+    else if (code === "refused" || code === "empty_completion") pileStatus("Claude didn't answer that batch. Change or remove the odd item and try again.", true);
+    else pileStatus("Something failed on the way to Claude (" + code + "). Try again.", true);
+  } finally { busy = false; ctl = null; $("stop").hidden = true; renderPile(); }
+}
+$("decode").onclick = decodePending;
+$("stop").onclick = () => ctl?.abort();
+
+// ---------- export ----------
+function cardText() {
+  return sorted().filter((i) => i.card && !i.exportedAt).reverse().map((i) => (i.cardLine || "").trim()).filter(Boolean).join("\n") + "\n";
+}
+$("exportBtn").onclick = async () => {
+  const ids = sorted().filter((i) => i.card && !i.exportedAt).map((i) => i.id); const text = cardText(); if (!text.trim()) return;
+  try {
+    const r = await downloadsNs.save({ filename: `korean-cards-${today()}.txt`, data: text });
+    if (r.status === "saved") { const now = new Date().toISOString(); for (const id of ids) { const it = store.items.get(id); if (it) await store.put({ ...it, exportedAt: now }); } pileStatus(`Saved ${ids.length} cards. Import into Anki with ; as the separator.`); }
+  } catch (e) { if (e?.code !== "declined") pileStatus("Couldn't save the file (" + (e?.code || "error") + "). Use Copy instead.", true); }
+};
+$("copyBtn").onclick = async () => {
+  const text = cardText(); if (!text.trim()) return;
+  try { await navigator.clipboard.writeText(text); toast("Cards copied"); }
+  catch { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.append(ta); ta.select(); try { document.execCommand("copy"); toast("Cards copied"); } catch { pileStatus("Copy blocked here. Select the card lines by hand.", true); } ta.remove(); }
+};
+
+// ---------- boot ----------
+function renderAll() {
+  renderPile(); renderLines();
+  const sel = $("recent"); const val = sel.value; sel.innerHTML = '<option value="">Saved sources…</option>' + [...store.sources.values()].sort((a, b) => (b.savedAt || "").localeCompare(a.savedAt || "")).map((s) => `<option value="${esc(s.id)}">${esc(s.label || s.id)}</option>`).join(""); sel.value = val;
+  $("storeSub").textContent = store.mode === "db" ? "saved to the desk" : "saved in this browser only";
+}
+store.onChange = renderAll;
+const ph = ls.get("mining-desk-phase"); if (ph != null) $("phase").value = String(ph);
+$("phase").addEventListener("change", () => ls.set("mining-desk-phase", $("phase").value));
+// example lines until she loads her own
+lines = EXAMPLE; usingExample = true; cur = { id: null, url: "", label: "" };
+renderAll();
+store.init();
+(async () => {
+  try { sampleFn = await window.claude?.use?.("sample"); } catch { sampleFn = null; }
+  try { downloadsNs = await window.claude?.use?.("downloads"); } catch { downloadsNs = null; }
+  if (!sampleFn) pileStatus("Decoding needs the Claude viewer. Open this page from claude.ai to decode; mining and saving still work.");
+  renderPile();
+})();
+})();
+</script>
