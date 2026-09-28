@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Last Stop Nowhere · palette v2</title>
+<link href="fonts.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:1200px;overflow:hidden}
+body{background:#1A264C;color:#BCD1DE;font-family:'Nunito',sans-serif;padding:52px 64px;position:relative}
+body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;mix-blend-mode:screen;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;opacity:.7}
+h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:44px;color:#D0DED1;margin:6px 0 26px}
+.refs{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+.ref img{width:100%;height:250px;object-fit:cover;border-radius:12px;display:block}
+.ref .sw{display:flex;gap:4px;margin-top:8px}
+.ref .sw i{flex:1;height:26px;border-radius:6px;display:block}
+.ref .cap{font-size:11px;margin-top:6px;opacity:.7;letter-spacing:.04em}
+.pal{margin-top:36px;display:grid;grid-template-columns:repeat(7,1fr);gap:14px}
+.c{border-radius:14px;border:1px solid rgba(208,222,209,.22);height:210px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 1px 0 rgba(255,255,255,.08) inset}
+.c b{font-size:15px;font-weight:700}.c span{font-size:11.5px;opacity:.8;line-height:1.5}
+.c.big{grid-row:span 1}
+.on-dark b,.on-dark span{color:#D0DED1}.on-light b,.on-light span{color:#1A264C}
+.bottom{margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.vibe{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1.25;color:#D0DED1}
+.vibe i{color:#76A1E6}
+.rules{font-size:13.5px;line-height:1.75;opacity:.9}
+.rules li{list-style:none;padding-left:18px;position:relative}
+.rules li::before{content:"";position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:50%;background:#1319BD;box-shadow:0 0 0 1px #76A1E6}
+.combo{display:flex;gap:0;margin-top:14px;border-radius:12px;overflow:hidden;height:54px}
+.combo i{display:block;flex:1}
+</style></head><body>
+<div class="label">Last Stop Nowhere · palette v2 · every hex is a pixel from your five pictures</div>
+<h1>Electric night. One warm wall.</h1>
+
+<div class="refs">
+  <div class="ref"><img src="refs/1.webp"><div class="sw"><i style="background:#292D41"></i><i style="background:#343B4E"></i><i style="background:#AA894E"></i><i style="background:#896E40"></i><i style="background:#393628"></i></div><div class="cap">1 · the street: dusk sky, lit ochre wall, trees</div></div>
+  <div class="ref"><img src="refs/2.jpg"><div class="sw"><i style="background:#3254C1"></i><i style="background:#5680CB"></i><i style="background:#1A264C"></i><i style="background:#28243A"></i><i style="background:#E4DAC0"></i></div><div class="cap">2 · the VHS room: blue wall, blue sheet, one glow</div></div>
+  <div class="ref"><img src="refs/3.jpg"><div class="sw"><i style="background:#0001B3"></i><i style="background:#498299"></i><i style="background:#698FA5"></i><i style="background:#BDCDBF"></i><i style="background:#D0DED1"></i></div><div class="cap">3 · blue screen at the beach: the pure blue, sea, foam</div></div>
+  <div class="ref"><img src="refs/4.jpg"><div class="sw"><i style="background:#1319BD"></i><i style="background:#070C7A"></i><i style="background:#513F2A"></i><i style="background:#5E503B"></i><i style="background:#1A120F"></i></div><div class="cap">4 · the eyes: electric blue on old wood and stone</div></div>
+  <div class="ref"><img src="refs/5.jpg"><div class="sw"><i style="background:#76A1E6"></i><i style="background:#6888C9"></i><i style="background:#789295"></i><i style="background:#BCD1DE"></i><i style="background:#1F2632"></i></div><div class="cap">5 · the kitchen: city lights, mint fridge, pale shelf</div></div>
+</div>
+
+<div class="label" style="margin-top:36px">The palette · 7 colours</div>
+<div class="pal">
+  <div class="c on-dark" style="background:#1319BD"><b>Electric</b><span>#1319BD · the eyes<br>the one accent</span></div>
+  <div class="c on-dark" style="background:#3254C1"><b>VHS blue</b><span>#3254C1 · the room<br>covers, headings</span></div>
+  <div class="c on-dark" style="background:#1A264C"><b>Night</b><span>#1A264C · the window<br>dark base</span></div>
+  <div class="c on-dark" style="background:#28243A"><b>Shadow</b><span>#28243A · the room<br>text on light</span></div>
+  <div class="c on-light" style="background:#76A1E6"><b>City light</b><span>#76A1E6 · the kitchen<br>light blue, tabs</span></div>
+  <div class="c on-light" style="background:#D0DED1"><b>Foam</b><span>#D0DED1 · the sea<br>pale, pages</span></div>
+  <div class="c on-light" style="background:#AA894E"><b>Lit wall</b><span>#AA894E · the street<br>the warm 5%</span></div>
+</div>
+
+<div class="bottom">
+  <div>
+    <div class="label">Vibe</div>
+    <p class="vibe" style="margin-top:8px">A city at blue hour, seen from a kitchen. Something is <i>watching, kindly</i>. Tape grain. One lamp on.</p>
+    <div class="combo"><i style="background:#1A264C"></i><i style="background:#3254C1"></i><i style="background:#1319BD"></i><i style="background:#76A1E6"></i><i style="background:#D0DED1"></i><i style="background:#AA894E"></i></div>
+  </div>
+  <ul class="rules">
+    <li>No cream, no beige, no navy-and-gold. The blues are electric, not corporate.</li>
+    <li>Electric is used once per page. VHS blue and City light do the everyday work.</li>
+    <li>Lit wall is the only warm colour and never covers more than 5% of a page.</li>
+    <li>Grain on covers and video. None on pages.</li>
+    <li>English only until the English edition has sold.</li>
+  </ul>
+</div>
+</body></html>
