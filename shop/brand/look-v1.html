@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Last Stop Nowhere · look v1</title>
+<link href="fonts.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1600px;height:1200px;overflow:hidden}
+body{background:#121621;color:#C3DCFF;font-family:'Nunito',sans-serif;padding:48px 64px;position:relative}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:screen;border-radius:inherit;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;opacity:.7}
+h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:40px;color:#E3F4F8;margin:6px 0 24px}
+.row{display:grid;grid-template-columns:540px 540px 1fr;gap:36px;align-items:start}
+.sheet{width:540px;height:720px;border-radius:22px;position:relative;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+/* cover */
+.cover{background:url(refs/blur-5.jpg) center/cover}
+.cover .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,22,33,.05) 0%,rgba(132,130,225,.38) 62%,rgba(120,118,214,.62) 100%)}
+.cover .glow{position:absolute;width:520px;height:520px;border-radius:50%;right:-200px;top:-180px;background:radial-gradient(circle,rgba(193,161,124,.45) 0%,rgba(193,161,124,0) 62%)}
+.cover .t{position:absolute;left:44px;right:44px;bottom:54px;color:#E3F4F8}
+.cover .t .k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;opacity:.85}
+.cover .t h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:52px;line-height:1;margin-top:10px}
+.cover .t p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;margin-top:10px;opacity:.9}
+.cover .mark{position:absolute;left:44px;top:40px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:#E3F4F8;opacity:.85}
+/* page */
+.page{background:url(refs/blur-8.jpg) center/cover}
+.page .tint{position:absolute;inset:0;background:linear-gradient(160deg,rgba(132,130,225,.35),rgba(18,22,33,.1) 60%)}
+.card{position:absolute;inset:26px;border-radius:18px;background:rgba(227,244,248,.94);color:#272F36;padding:40px 40px 34px;overflow:hidden}
+.card .lamp{position:absolute;width:420px;height:420px;border-radius:50%;right:-160px;top:-170px;background:radial-gradient(circle,rgba(193,161,124,.55) 0%,rgba(193,161,124,0) 62%)}
+.card .date{text-align:center;font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;color:#475D76}
+.card .date b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;letter-spacing:0;text-transform:none;color:#272F36;margin-top:6px}
+.card h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;margin-top:46px;color:#272F36}
+.card .lines{margin-top:12px}.card .ln{height:38px;border-bottom:1.25px solid #C3DCFF}
+.card .pill{display:inline-block;margin-top:44px;padding:8px 14px;border-radius:999px;background:#8482E1;color:#E3F4F8;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.card .box{margin-top:14px;border-radius:14px;background:#C3DCFF;padding:14px 16px;height:118px}
+.card .box .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#475D76}
+.card .foot{position:absolute;left:40px;right:40px;bottom:22px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#8482E1}
+/* picker */
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.pick .p{border-radius:12px;height:118px;background-size:cover;background-position:center;position:relative;overflow:hidden;border:1px solid rgba(227,244,248,.18)}
+.pick .p span{position:absolute;left:10px;bottom:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#E3F4F8;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.sw{display:flex;gap:10px;margin-top:12px}
+.sw div{flex:1;border-radius:12px;height:70px;padding:10px;font-size:11px;font-weight:700;display:flex;align-items:flex-end;color:#E3F4F8;border:1px solid rgba(227,244,248,.18)}
+.notes{font-size:13px;line-height:1.7;opacity:.9;margin-top:18px}
+.notes li{list-style:none;padding-left:16px;position:relative}.notes li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:#8482E1}
+.cap{font-size:11.5px;letter-spacing:.06em;opacity:.7;margin-top:10px;text-transform:uppercase;font-weight:700}
+</style></head><body>
+<div class="label">Last Stop Nowhere · look v1 · the journal built from the pictures, blurred into light</div>
+<h1>The page is the room. The city is the window.</h1>
+<div class="row">
+  <div>
+    <div class="sheet cover grain"><div class="tint"></div><div class="glow"></div>
+      <div class="mark">Last Stop Nowhere</div>
+      <div class="t"><div class="k">Ninety evenings</div><h2>The Evening<br>Journal</h2><p>for people who tried and felt silly afterwards</p></div>
+    </div>
+    <div class="cap">Cover · picture 5 blurred, lavender at the bottom, one lamp top-right</div>
+  </div>
+  <div>
+    <div class="sheet page grain"><div class="tint"></div>
+      <div class="card"><div class="lamp"></div>
+        <div class="date">Evening<b>One</b></div>
+        <h3>Tonight, three things that went right</h3>
+        <div class="lines"><div class="ln"></div><div class="ln"></div><div class="ln"></div></div>
+        <span class="pill">Tomorrow</span>
+        <div class="box"><div class="k">One thing, and what could get in the way</div></div>
+        <div class="foot"><span>01 · 90</span><span>Last Stop Nowhere</span></div>
+      </div>
+    </div>
+    <div class="cap">Page · picture 8 blurred behind a pale card, date centred, lamp glow top-right</div>
+  </div>
+  <div>
+    <div class="label">Pick the picture for the cover</div>
+    <div class="pick">
+      <div class="p" style="background-image:url(refs/blur-5.jpg)"><span>5 · kitchen</span></div>
+      <div class="p" style="background-image:url(refs/blur-8.jpg)"><span>8 · stream</span></div>
+      <div class="p" style="background-image:url(refs/blur-6.jpg)"><span>6 · rain street</span></div>
+      <div class="p" style="background-image:url(refs/blur-7.jpg)"><span>7 · corner</span></div>
+      <div class="p" style="background-image:url(refs/blur-2.jpg)"><span>2 · VHS room</span></div>
+      <div class="p" style="background:linear-gradient(160deg,#8482E1,#6888C9 50%,#121621)"><span>gradient only</span></div>
+    </div>
+    <div class="label" style="margin-top:22px">The purple, sampled from picture 2</div>
+    <div class="sw"><div style="background:#8482E1">Light purple #8482E1</div><div style="background:#7876D6">Lavender #7876D6</div></div>
+    <ul class="notes">
+      <li>Every background is one of your pictures, blurred. No flat colour anywhere on covers.</li>
+      <li>Purple lives in the blur and in one small element per page.</li>
+      <li>Light comes from one corner, like the lamp on the walkway.</li>
+      <li>Grain on the cover and the window edge. The writing card stays clean.</li>
+      <li>Video: the same blurred picture slowly drifting, text on top.</li>
+    </ul>
+  </div>
+</div>
+</body></html>
