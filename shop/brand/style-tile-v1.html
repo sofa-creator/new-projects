@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Last Stop Nowhere · style tile v1</title>
+
+<link href="fonts.css" rel="stylesheet">
+<style>
+  :root{
+    --blue-hour:#14245A;   /* base dark, the sky */
+    --cobalt:#2A3FD6;      /* the one accent */
+    --lamp:#F2D27A;        /* warm lamp light */
+    --ochre:#C9A24E;       /* the building */
+    --mint:#BFE3DC;        /* the fridge */
+    --paper:#F6F3EC;       /* page */
+    --ink:#1C1F2B;         /* text */
+    --sky-wash:#E7ECF8;    /* pastel of blue-hour */
+    --lamp-wash:#FBF3DE;   /* pastel of lamp */
+    --rule:#D5DBEA;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1600px;height:1200px;overflow:hidden}
+  body{background:var(--blue-hour);color:var(--paper);font-family:'Nunito',sans-serif;position:relative}
+  body::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:screen;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+  .glow{position:absolute;width:900px;height:900px;border-radius:50%;left:-250px;top:-380px;
+    background:radial-gradient(circle,rgba(242,210,122,.22) 0%,rgba(242,210,122,0) 62%);}
+  .wrap{position:relative;display:grid;grid-template-columns:520px 1fr;gap:56px;padding:56px 64px;height:100%}
+  .label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.7;font-weight:600}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:48px;line-height:1.05;margin:8px 0 4px}
+  h1 .ru{display:block;font-size:26px;font-style:italic;opacity:.75;margin-top:6px;font-weight:400}
+  .sub{font-size:14px;opacity:.75;line-height:1.5;max-width:460px}
+  .block{margin-top:30px}
+  .swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .sw{border-radius:14px;padding:12px 12px 10px;height:92px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
+  .sw b{font-size:13px;font-weight:700}.sw span{font-size:11px;opacity:.75;letter-spacing:.04em}
+  .dark b,.dark span{color:var(--paper)}.light b,.light span{color:var(--ink)}
+  .type{margin-top:12px;background:rgba(246,243,236,.06);border:1px solid rgba(246,243,236,.14);border-radius:16px;padding:18px 20px}
+  .type .serif{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;line-height:1.1}
+  .type .serif i{font-weight:400}
+  .type .sans{font-size:14px;line-height:1.55;margin-top:10px;opacity:.9}
+  .type .meta{font-size:11px;opacity:.6;margin-top:10px;letter-spacing:.08em;text-transform:uppercase}
+  .rules{margin-top:22px;font-size:13.5px;line-height:1.7;opacity:.85}
+  .rules li{list-style:none;padding-left:18px;position:relative}
+  .rules li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--cobalt)}
+
+  /* the page */
+  .stage{position:relative;display:flex;align-items:center;justify-content:center}
+  .page{position:relative;width:690px;height:980px;background:var(--paper);color:var(--ink);border-radius:22px;
+    box-shadow:0 30px 60px rgba(0,0,0,.45),0 2px 0 rgba(255,255,255,.35) inset;padding:52px 78px 48px 56px}
+  .tabs{position:absolute;right:-30px;top:120px;display:flex;flex-direction:column;gap:12px}
+  .tab{width:30px;height:104px;border-radius:0 12px 12px 0;background:var(--sky-wash);display:flex;align-items:center;justify-content:center;
+    writing-mode:vertical-rl;font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#5b6690;box-shadow:2px 3px 8px rgba(0,0,0,.18)}
+  .tab.on{background:var(--cobalt);color:var(--paper)}
+  .top{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#5b6690}
+  .top .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cobalt);margin-right:8px;vertical-align:1px}
+  h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:38px;margin-top:22px;line-height:1}
+  h2 small{font-family:'Nunito';font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#5b6690;margin-left:14px;vertical-align:middle}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  .box{border:1.25px solid var(--rule);border-radius:16px;height:150px;padding:12px 14px;position:relative;
+    background:repeating-linear-gradient(to bottom,transparent 0 31px,var(--rule) 31px 32px) 0 44px / 100% calc(100% - 44px) no-repeat}
+  .box .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#5b6690}
+  .box .n{position:absolute;right:12px;top:10px;font-family:'Cormorant Garamond',serif;font-size:20px;color:#9AA4C6}
+  .box.accent{border-color:var(--cobalt);background-color:var(--sky-wash)}
+  .box.accent .k{color:var(--cobalt)}
+  .evening{margin-top:26px}
+  .lines{margin-top:12px}
+  .line{display:flex;align-items:flex-end;gap:12px;height:36px;border-bottom:1.25px solid var(--rule);font-family:'Cormorant Garamond',serif;font-size:18px;color:#9AA4C6}
+  .tonight{margin-top:18px;border-radius:16px;background:var(--lamp-wash);padding:14px 16px 16px;border-left:4px solid var(--cobalt)}
+  .tonight .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:#8a6a1f}
+  .tonight .l{height:34px;border-bottom:1.25px solid #E4D6B0;margin-top:8px}
+  .foot{position:absolute;left:56px;right:78px;bottom:26px;display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#9AA4C6;font-weight:700}
+  .doodle{position:absolute;right:84px;bottom:62px}
+  .sample{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:#3a4160;position:absolute;left:14px;top:44px;line-height:32px}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+  <div>
+    <div class="label">Last Stop Nowhere · style tile · v1</div>
+    <h1>Blue hour, warm lamps.<span class="ru">Синий час, тёплые фонари.</span></h1>
+    <p class="sub">The base is the sky from your street photo. The accent is the cobalt from the eyes and the blue screen. The warmth is the lamp on the ochre wall. Pages are pale washes of those three, never grey, never beige.</p>
+
+    <div class="block">
+      <div class="label">Palette · 9 colours, one accent</div>
+      <div class="swatches">
+        <div class="sw dark" style="background:#14245A"><b>Blue hour</b><span>#14245A · base</span></div>
+        <div class="sw dark" style="background:#2A3FD6"><b>Cobalt</b><span>#2A3FD6 · the accent</span></div>
+        <div class="sw light" style="background:#F2D27A"><b>Lamp</b><span>#F2D27A · warmth</span></div>
+        <div class="sw light" style="background:#C9A24E"><b>Ochre</b><span>#C9A24E · the wall</span></div>
+        <div class="sw light" style="background:#BFE3DC"><b>Mint</b><span>#BFE3DC · highlight</span></div>
+        <div class="sw light" style="background:#F6F3EC"><b>Paper</b><span>#F6F3EC · page</span></div>
+        <div class="sw light" style="background:#E7ECF8"><b>Sky wash</b><span>#E7ECF8 · pastel</span></div>
+        <div class="sw light" style="background:#FBF3DE"><b>Lamp wash</b><span>#FBF3DE · pastel</span></div>
+        <div class="sw dark" style="background:#1C1F2B"><b>Ink</b><span>#1C1F2B · text</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="label">Type · serif for titles, rounded sans for everything else</div>
+      <div class="type">
+        <div class="serif">Last Stop Nowhere <i>· day one of ninety</i></div>
+        <div class="serif" style="font-size:24px;margin-top:4px">Последняя остановка · нигде</div>
+        <div class="sans">Nunito for labels, lines and small print. It has Cyrillic, so the Russian edition needs no second font. Body text sits at 11–12 pt on the page.</div>
+        <div class="meta">Cormorant Garamond 500 · Nunito 400–700 · both Google Fonts, free for sale</div>
+      </div>
+    </div>
+
+    <ul class="rules">
+      <li>One cobalt element per page. Never two.</li>
+      <li>One doodle per page. Here it is the street lamp.</li>
+      <li>Corners 16–22 px. Rules 1.25 px. No texture.</li>
+      <li>Dark mode: blue hour paper, lamp-coloured text, same layout.</li>
+    </ul>
+  </div>
+
+  <div class="stage">
+    <div class="page">
+      <div class="tabs">
+        <div class="tab on">Days</div><div class="tab">Weeks</div><div class="tab">Months</div><div class="tab">Letter</div>
+      </div>
+      <div class="top"><span><span class="dot"></span>Day 01 · 90</span><span>Mon · ____ / ____</span></div>
+
+      <svg class="doodle" width="88" height="165" viewBox="0 0 64 120" fill="none" stroke="#1C1F2B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="32" cy="30" r="22" fill="#F2D27A" stroke="none" opacity=".55"/>
+        <path d="M32 112 C31 96 33 80 32 64"/>
+        <path d="M24 112 Q32 108 40 112"/>
+        <path d="M22 116 Q32 121 42 116"/>
+        <path d="M32 64 L22 52 Q32 44 42 52 Z"/>
+        <path d="M32 44 C33 40 31 36 32 33"/>
+        <path d="M26 22 Q32 18 38 22"/>
+        <path d="M21 52 L43 52"/>
+      </svg>
+
+      <h2>Morning<small>the four boxes</small></h2>
+      <div class="grid">
+        <div class="box"><div class="k">The wish</div><div class="n">1</div><div class="sample">to finish the first page before the tea goes cold</div></div>
+        <div class="box"><div class="k">How it looks, done</div><div class="n">2</div></div>
+        <div class="box"><div class="k">What gets in the way</div><div class="n">3</div></div>
+        <div class="box accent"><div class="k">If that happens, I will…</div><div class="n">4</div></div>
+      </div>
+
+      <div class="evening">
+        <h2>Evening<small>three good things</small></h2>
+        <div class="lines"><div class="line">1</div><div class="line">2</div><div class="line">3</div></div>
+        <div class="tonight"><div class="k">Tonight's sentence</div><div class="l"></div></div>
+      </div>
+
+      <div class="foot"><span>Last Stop Nowhere</span><span>Undated · Light</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
