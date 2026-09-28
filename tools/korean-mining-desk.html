@@ -227,12 +227,14 @@ table.log td.num{font-variant-numeric:tabular-nums; text-align:right}
           <input type="text" id="label" placeholder="Label, e.g. 지수 live 24 Sep" autocomplete="off">
           <select id="recent" title="Saved sources"><option value="">Saved sources…</option></select>
         </div>
-        <textarea id="transcript" placeholder="Paste the lines: a Language Reactor export, a YouTube transcript, a Whisper transcript, or the captions you typed. Timestamps are kept and link to that second." spellcheck="false"></textarea>
+        <textarea id="transcript" placeholder="Paste the lines: an SRT or VTT from asbplayer, a YouTube transcript, a Language Reactor export, a Whisper transcript, or captions you typed. Timestamps are kept and link to that second." spellcheck="false"></textarea>
         <details class="fmt"><summary>What it understands</summary>
-          <pre>0:12
-오늘 진짜 피곤하잖아
-0:15
-근데 왔어요
+          <pre>1
+00:00:12,000 --> 00:00:14,500
+오늘 진짜 피곤하잖아        (SRT / VTT, as asbplayer saves them)
+
+0:12
+오늘 진짜 피곤하잖아        (YouTube transcript)
 
 [00:12] 오늘 진짜 피곤하잖아
 0:12 오늘 진짜 피곤하잖아
@@ -357,15 +359,31 @@ function videoId(url) {
   return null;
 }
 const ytAt = (id, t) => id ? ("https://www.youtube.com/watch?v=" + encodeURIComponent(id) + (t != null ? "&t=" + Math.floor(t) + "s" : "")) : null;
-function parseTs(s) { const m = s.match(/^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})$/); if (!m) return null; return (m[1] ? +m[1]*3600 : 0) + (+m[2])*60 + (+m[3]); }
+function parseTs(s) {
+  let m = s.match(/^(?:(\d{1,2}):)?(\d{1,2}):(\d{2})(?:[.,](\d{1,3}))?$/); if (!m) return null;
+  return (m[1] ? +m[1]*3600 : 0) + (+m[2])*60 + (+m[3]) + (m[4] ? +m[4].padEnd(3, "0")/1000 : 0);
+}
+const cleanCue = (t) => t.replace(/<[^>]+>/g, "").replace(/\{\\[^}]*\}/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+function parseCues(text) { // SRT / WebVTT (asbplayer, YouTube subtitle downloads)
+  const out = []; const rows = text.split(/\r?\n/); let i = 0;
+  while (i < rows.length) {
+    const m = rows[i].match(/^\s*((?:\d{1,2}:)?\d{1,2}:\d{2}[.,]\d{1,3})\s*-->\s*(?:(?:\d{1,2}:)?\d{1,2}:\d{2}[.,]\d{1,3})/);
+    if (!m) { i++; continue; }
+    const t = parseTs(m[1]); i++; const buf = [];
+    while (i < rows.length && rows[i].trim() !== "") { buf.push(rows[i]); i++; }
+    const txt = cleanCue(buf.join(" ")); if (txt) out.push({ t, text: txt });
+  }
+  return out;
+}
 function parseTranscript(text) {
+  if (/-->/.test(text)) { const cues = parseCues(text); if (cues.length) return cues; }
   const out = []; let pendingT = null;
   for (const raw of text.split(/\r?\n/)) {
-    const line = raw.trim(); if (!line) continue;
+    const line = raw.trim(); if (!line || /^WEBVTT/i.test(line)) continue;
     const alone = parseTs(line.replace(/^\[|\]$/g, "")); if (alone != null) { pendingT = alone; continue; }
-    const lead = line.match(/^\[?((?:\d{1,2}:)?\d{1,2}:\d{2})\]?\s+(.+)$/);
-    if (lead) { out.push({ t: parseTs(lead[1]), text: lead[2].trim() }); pendingT = null; continue; }
-    out.push({ t: pendingT, text: line }); pendingT = null;
+    const lead = line.match(/^\[?((?:\d{1,2}:)?\d{1,2}:\d{2}(?:[.,]\d{1,3})?)\]?\s+(.+)$/);
+    if (lead) { out.push({ t: parseTs(lead[1]), text: cleanCue(lead[2]) }); pendingT = null; continue; }
+    out.push({ t: pendingT, text: cleanCue(line) }); pendingT = null;
   }
   return out;
 }
